@@ -14,8 +14,10 @@ return new class extends Migration
         Schema::create('lab_tests', function (Blueprint $table) {
             $table->id();
 
+            $table->string('test_code')->unique();
+
             // Link to Sample
-            $table->foreignId('sample_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('sample_id')->constrained()->cascadeOnDelete()->index();
             $table->string('test_name');
 
             // Workflow status: pending, in_progress, completed, failed
@@ -28,7 +30,7 @@ return new class extends Migration
             ])->default('pending');
 
             // User assigned to perform the test
-            $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete()->index();
             $table->timestamp('completed_at')->nullable();
 
             $table->softDeletes();
